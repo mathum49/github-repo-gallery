@@ -6,6 +6,10 @@ const listView = document.querySelector(".repo-list");
 const allRepo= document.querySelector(".repos");
 // selects the section with individual repo data
 const repoView = document.querySelector(".repo-data");
+// select the Back to Repo Gallery button
+const backButton = document.querySelector("button");
+// select the input with the “Search by name” placeholder
+const filterInput = document.querySelector(".filter-repos");
 
 const userName = "mathum49";
 
@@ -44,13 +48,15 @@ const getRepo = async function (){
 };
 
 // disply the list
-const displayRepos = function(repos){
-    for(const repo of repos){
+const displayRepos = function(allRepo){
+    filterInput.classList.remove("hide");
+    for(const repo of allRepo){
         const li = document.createElement("li");
         li.classList.add("repo");
         li.innerHTML = `<h3>${repo.name}</h3>`;
         listView.append(li);
     }
+    
 };
 
 // add event listener to generate call to more details about the repo
@@ -90,5 +96,33 @@ displayRepoDetails = function (repoInfo, languages){
     repoView.append(infoDiv);
     repoView.classList.remove("hide");
     allRepo.classList.add("hide");
+    backButton.classList.remove("hide");
 };
+
+
+// show going back to all repos button
+backButton.addEventListener("click", function(){
+    allRepo.classList.remove("hide");
+    repoView.classList.add("hide");
+    backButton.classList.add("hide");
+});
+
+// Search input
+filterInput.addEventListener("input", function(e){
+    searchEntry = e.target.value;
+    const search = searchEntry.toLowerCase();
+    // console.log(search);
+
+    // select ALL elements on the page with a class of “repo”
+    const repos = document.querySelectorAll(".repo");
+
+    for (const repo of repos){
+        const repoName = repo.innerText.toLowerCase();
+        if (repoName.includes(search)){
+            repo.classList.remove("hide");
+        } else {
+            repo.classList.add("hide");
+        }
+    }
+});
 
